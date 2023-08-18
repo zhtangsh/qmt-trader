@@ -1,9 +1,28 @@
 import datetime
+from dataclasses import dataclass
 
 
+@dataclass
 class QmtOrder:
+    account_id: str
+    account_type: int
+    order_id: int
+    order_remark: str
+    order_status: int
+    order_sysid: str
+    order_status: str
+    order_time: datetime.datetime
+    order_type: int
+    order_volume: float
+    price: float
+    price_type: str
+    stock_code: str
+    status_msg: str
+    strategy_name: str
+    traded_price: float
+    traded_volume: float
+
     def __init__(self, o):
-        self.xquant_object = o
         self.account_id = o.account_id
         self.account_type = o.account_type
         self.order_id = o.order_id
@@ -11,8 +30,7 @@ class QmtOrder:
         self.order_status = o.order_status
         self.order_sysid = o.order_sysid
         self.order_status = o.order_status
-        self.order_sysid = o.order_sysid
-        self.order_time = o.order_time
+        self.order_time = datetime.datetime.fromtimestamp(o.order_time)
         self.order_type = o.order_type
         self.order_volume = o.order_volume
         self.price = o.price
@@ -23,17 +41,21 @@ class QmtOrder:
         self.traded_price = o.traded_price
         self.traded_volume = o.traded_volume
 
-    def __repr__(self):
-        return f"QmtOrder(order_id={self.order_id},order_time={datetime.datetime.fromtimestamp(self.order_time)},stock_code={self.stock_code}," \
-               f"order_volume={self.order_volume},price={self.price},traded_price={self.traded_price},traded_volume={self.traded_volume}," \
-               f"order_remark={self.order_remark},order_status={self.order_status},order_type={self.order_type},price_type={self.price_type}," \
-               f"status_msg={self.status_msg},strategy_name={self.strategy_name})"
 
-
+@dataclass
 class QmtPosition:
+    account_id: str
+    account_type: int
+    can_use_volume: float
+    frozen_volume: float
+    market_value: float
+    on_road_volume: float
+    open_price: float
+    stock_code: str
+    volume: float
+    yesterday_volume: float
 
     def __init__(self, o):
-        self.xquant_object = o
         self.account_id = o.account_id
         self.account_type = o.account_type
         self.can_use_volume = o.can_use_volume
@@ -45,16 +67,23 @@ class QmtPosition:
         self.volume = o.volume
         self.yesterday_volume = o.yesterday_volume
 
-    def __repr__(self):
-        return f"QmtPosition(stock_code={self.stock_code},open_price={self.open_price},volume={self.volume}," \
-               f"yesterday_volume={self.yesterday_volume}," \
-               f"market_value={self.market_value},frozen_volume={self.frozen_volume},can_use_volume={self.can_use_volume})"
 
-
+@dataclass
 class QmtTrade:
+    account_id: str
+    account_type: int
+    order_remark: str
+    order_sysid: str
+    order_type: int
+    stock_code: str
+    strategy_name: str
+    traded_amount: float
+    traded_id: str
+    traded_price: float
+    traded_time: datetime.datetime
+    traded_volume: float
 
     def __init__(self, o):
-        self.xquant_object = o
         self.account_id = o.account_id
         self.account_type = o.account_type
         self.order_id = o.order_id
@@ -66,9 +95,5 @@ class QmtTrade:
         self.traded_amount = o.traded_amount
         self.traded_id = o.traded_id
         self.traded_price = o.traded_price
-        self.traded_time = o.traded_time
+        self.traded_time = datetime.datetime.fromtimestamp(o.traded_time)
         self.traded_volume = o.traded_volume
-
-    def __repr__(self):
-        return f"QmtTrade(traded_id={self.traded_id},traded_price={self.traded_price},traded_amount={self.traded_amount}," \
-               f"traded_volume={self.traded_volume},traded_time={datetime.datetime.fromtimestamp(self.traded_time)})"

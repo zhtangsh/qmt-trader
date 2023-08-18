@@ -1,22 +1,26 @@
+from dataclasses import dataclass
+
+
+@dataclass
 class QmtAccountInfo:
+    account_id: str
+    account_type: int
+    broker_id: int
+    broker_name: str
+    broker_type: int
+    login_status: str
+    platform_id: int
+    product_code: str
+    product_id: str
+    product_name: str
 
     def __init__(self, o):
-        self.xquant_object = o
         self.account_id = o.account_id
         self.account_type = o.account_type
         self.broker_id = o.broker_id
         self.broker_name = o.broker_id
         self.broker_type = o.broker_type
         self.login_status = o.login_status
-        self.m_nAccountType = o.m_nAccountType
-        self.m_nBrokerType = o.m_nBrokerType
-        self.m_nProductID = o.m_nProductID
-        self.m_nStatus = o.m_nStatus
-        self.m_strAccountID = o.m_strAccountID
-        self.m_strBrokerID = o.m_strBrokerID
-        self.m_strBrokerName = o.m_strBrokerName
-        self.m_strProductCode = o.m_strProductCode
-        self.m_strProductName = o.m_strProductName
         self.platform_id = o.platform_id
         self.product_code = o.product_code
         self.product_id = o.product_id
@@ -29,37 +33,31 @@ class QmtAccountInfo:
         return f"QmtAccountInfo(account_id:{self.account_id})"
 
 
+@dataclass
 class QmtAccountStatus:
+    account_id: str
+    account_type: int
+    status: int
 
     def __init__(self, o):
-        self.xquant_object = o
         self.account_id = o.account_id
         self.account_type = o.account_type
-        self.m_nAccountType = o.m_nAccountType
-        self.m_nStatus = o.m_nStatus
-        self.m_strAccountID = o.m_strAccountID
         self.status = o.status
 
-    def get_account_number(self):
-        return self.account_id
 
-    def __repr__(self) -> str:
-        return f"QmtAccountStatus(account_id:{self.account_id})"
-
-
+@dataclass
 class QmtAsset:
+    account_id: str
+    account_type: str
+    cash: float
+    frozen_cash: float
+    market_value: float
+    total_asset: float
 
     def __init__(self, o):
-        self.xquant_object = o
         self.account_id = o.account_id
         self.account_type = o.account_type
         self.cash = o.cash
         self.frozen_cash = o.frozen_cash
         self.market_value = o.market_value
         self.total_asset = o.total_asset
-
-    def get_account_number(self):
-        return self.account_id
-
-    def __repr__(self) -> str:
-        return f"QmtAsset(account_id:{self.account_id},cash:{self.cash},frozen_cash:{self.frozen_cash},market_value:{self.market_value},total_asset:{self.total_asset})"
