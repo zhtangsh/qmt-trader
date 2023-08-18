@@ -1,0 +1,17 @@
+version: '3'
+services:
+  nexus:
+    image: ${RABBIT_IMAGE}
+    environment:
+      TZ: "Asia/Shanghai"
+      RABBITMQ_USERNAME: "${RABBITMQ_USERNAME}"
+      RABBITMQ_PASSWORD: "${RABBITMQ_PASSWORD}"
+    volumes:
+      - "./enabled_plugins:/etc/rabbitmq/enabled_plugins"
+    ports:
+      - "15672:5672"
+    networks:
+      - proxynet
+networks:
+  proxynet:
+    name: ingress_default
