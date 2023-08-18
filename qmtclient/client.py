@@ -9,16 +9,19 @@ from qmtmodel import *
 
 class QmtClient:
 
-    def __init__(self, path:str, account_number: str, callback=None, ):
+    def __init__(self, path: str, account_number: str, callback=None, ):
         if callback is None:
             callback = DefaultXtQuantTraderCallback()
         self.session_id = int(time.time())
         self._account = StockAccount(account_number)
         self._trader = XtQuantTrader(path, self.session_id)
         self._trader.register_callback(callback)
-        self._trader.start()
-        self._trader.connect()
-        self._trader.subscribe(self._account)
+        ok = self._trader.start()
+        print(ok)
+        ok = self._trader.connect()
+        print(ok)
+        ok = self._trader.subscribe(self._account)
+        print(ok)
 
     def get_account_info(self):
         res = self._trader.query_account_infos()
@@ -40,19 +43,19 @@ class QmtClient:
 
     def get_stock_orders(self, cancelable_only=False):
         res = self._trader.query_stock_orders(self._account, cancelable_only=cancelable_only)
-        return res
+        return [QmtOrder(r) for r in res]
 
     def get_stock_trades(self):
-        return self._trader.query_stock_trades(self._account)
+        res = self._trader.query_stock_trades(self._account)
+        return [QmtTrade(r) for r in res]
 
     def get_stock_positions(self):
-        return self._trader.query_stock_positions(self._account)
+        res = self._trader.query_stock_positions(self._account)
+        return [QmtPosition(r) for r in res]
 
     def order_stock(self, stock_code, order_type, order_volume, price_type, price, strategy_name,
                     order_remark):
         """
-        :param trader:
-        :param account: StockAccount 资金账号
         :param stock_code: str 证券代码，如'600000.SH'
         :param order_type: int 委托类型
         :param order_volume: int 委托数量，股票以'股'为单位，债券以'张'为单位
