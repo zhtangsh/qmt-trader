@@ -29,7 +29,6 @@ class QmtOrder:
         self.order_remark = o.order_remark
         self.order_status = o.order_status
         self.order_sysid = o.order_sysid
-        self.order_status = o.order_status
         self.order_time = datetime.datetime.fromtimestamp(o.order_time)
         self.order_type = o.order_type
         self.order_volume = o.order_volume
@@ -40,6 +39,27 @@ class QmtOrder:
         self.strategy_name = o.strategy_name
         self.traded_price = o.traded_price
         self.traded_volume = o.traded_volume
+
+    def kafka_message(self):
+        obj = {
+            'account_id': self.account_id,
+            'account_type': self.account_type,
+            'order_id': self.order_id,
+            'order_status': self.order_status,
+            'order_remark': self.order_remark,
+            'order_sysid': self.order_sysid,
+            'order_time': self.order_time.isoformat(),
+            'order_type': self.order_type,
+            'order_volume': self.order_volume,
+            'price': self.price,
+            'price_type': self.price_type,
+            'status_msg': self.status_msg,
+            'stock_code': self.stock_code,
+            'traded_price': self.traded_price,
+            'traded_volume': self.traded_volume,
+            'strategy_name': self.strategy_name,
+        }
+        return obj
 
 
 @dataclass
@@ -97,3 +117,21 @@ class QmtTrade:
         self.traded_price = o.traded_price
         self.traded_time = datetime.datetime.fromtimestamp(o.traded_time)
         self.traded_volume = o.traded_volume
+
+    def kafka_message(self):
+        obj = {
+            'account_id': self.account_id,
+            'account_type': self.account_type,
+            'order_id': self.order_id,
+            'order_remark': self.order_remark,
+            'order_sysid': self.order_sysid,
+            'order_type': self.order_type,
+            'stock_code': self.stock_code,
+            'traded_price': self.traded_price,
+            'traded_volume': self.traded_volume,
+            'strategy_name': self.strategy_name,
+            'traded_id': self.traded_id,
+            'traded_amount': self.traded_amount,
+            'traded_time': self.traded_time.isoformat()
+        }
+        return obj

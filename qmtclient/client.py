@@ -9,9 +9,9 @@ from qmtmodel import *
 
 class QmtClient:
 
-    def __init__(self, path: str, account_number: str, callback=None, ):
+    def __init__(self, path: str, account_number: str, callback=None, kafka_client=None):
         if callback is None:
-            callback = DefaultXtQuantTraderCallback()
+            callback = DefaultXtQuantTraderCallback(kafka_client)
         self.session_id = int(time.time())
         self._account = StockAccount(account_number)
         self._trader = XtQuantTrader(path, self.session_id)

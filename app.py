@@ -1,3 +1,5 @@
+import json
+
 from flask import Flask
 from flask_jsonrpc import JSONRPC
 from utils import sys_utils
@@ -6,6 +8,7 @@ from dotenv import load_dotenv
 from typing import List
 from qmtmodel import *
 from flask.json import JSONEncoder
+from kafka import KafkaProducer
 
 
 class CustomJSONEncoder(JSONEncoder):
@@ -34,7 +37,9 @@ def get_trader(code: str = 'default') -> QmtClient:
     if code not in ACCOUNT_REF:
         path = sys_utils.get_env('QMT_PATH')
         account_number = sys_utils.get_env('QMT_ACCOUNT')
-        ACCOUNT_REF[code] = QmtClient(path, account_number)
+        kafka_url = sys_utils.get_env('KAFKA_URL', '192.168.1.60:9092')
+        producer = KafkaProducer(bootstrap_servers=kafka_url, value_serializer=lambda v: json.dumps(v).encode('utf-8'))
+        ACCOUNT_REF[code] = QmtClient(path, account_number, kafka_client=producer)
     return ACCOUNT_REF[code]
 
 
