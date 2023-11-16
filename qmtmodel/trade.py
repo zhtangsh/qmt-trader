@@ -1,4 +1,5 @@
 import datetime
+import math
 from dataclasses import dataclass
 
 
@@ -82,7 +83,8 @@ class QmtPosition:
         self.frozen_volume = o.frozen_volume
         self.market_value = o.market_value
         self.on_road_volume = o.on_road_volume
-        self.open_price = o.open_price
+        # handle nan open_price
+        self.open_price = o.open_price if not math.isnan(o.open_price) else None
         self.stock_code = o.stock_code
         self.volume = o.volume
         self.yesterday_volume = o.yesterday_volume

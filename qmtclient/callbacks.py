@@ -25,6 +25,8 @@ class DefaultXtQuantTraderCallback(XtQuantTraderCallback):
         :return:
         """
         qmt_order = QmtOrder(order)
+        print(order.price_type)
+        print(order)
         message = qmt_order.kafka_message()
         self.kafka_client.send('orderCallback', message)
         print(datetime.datetime.now(), '委托回调', order.order_remark)
