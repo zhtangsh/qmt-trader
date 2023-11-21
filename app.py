@@ -5,10 +5,11 @@ from flask_jsonrpc import JSONRPC
 from utils import sys_utils
 from qmtclient import QmtClient
 from dotenv import load_dotenv
-from typing import List
+from typing import List, Dict
 from qmtmodel import *
 from flask.json import JSONEncoder
 from kafka import KafkaProducer
+from qmtdata import general
 
 
 class CustomJSONEncoder(JSONEncoder):
@@ -106,6 +107,14 @@ def cancel_order_stock(
 ) -> int:
     trader = get_trader()
     res = trader.cancel_order_stock(order_id)
+    return res
+
+
+@jsonrpc.method("data.live_tick_data")
+def live_tick_data(
+        order_id_list: List[str]
+) -> List[Dict[str, any]]:
+    res = general.get_live_tick(order_id_list)
     return res
 
 
