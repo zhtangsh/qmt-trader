@@ -12,15 +12,18 @@ class QmtClient:
     def __init__(self, path: str, account_number: str, callback=None, kafka_client=None):
         if callback is None:
             callback = DefaultXtQuantTraderCallback(kafka_client)
-        self.session_id = int(time.time())
-        self._account = StockAccount(account_number)
-        self._trader = XtQuantTrader(path, self.session_id)
-        self._trader.register_callback(callback)
         self.connected = False
+        self.path = path
+        self.account_number = account_number
+        self.callback = callback
 
     def check_connection(self):
         if self.connected:
             return True
+        self.session_id = int(time.time())
+        self._account = StockAccount(self.account_number)
+        self._trader = XtQuantTrader(self.path, self.session_id)
+        self._trader.register_callback(self.callback)
         ok = self._trader.start()
         logger.info(f"start response: {ok}")
         if not ok:
