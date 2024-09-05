@@ -10,6 +10,7 @@ from qmtmodel import *
 from flask.json import JSONEncoder
 from kafka import KafkaProducer
 from qmtdata import general
+import logging
 
 
 class CustomJSONEncoder(JSONEncoder):
@@ -118,5 +119,7 @@ def live_tick_data(
     return res
 
 
+level = logging.INFO
+sys_utils.logging_config(level=level)
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=6000)
