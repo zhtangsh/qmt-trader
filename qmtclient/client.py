@@ -26,17 +26,17 @@ class QmtClient:
         self._trader.register_callback(self.callback)
         ok = self._trader.start()
         logger.info(f"start response: {ok}")
-        if not ok:
+        if ok is not None:
             logging.info("trader start failed, not connected")
             return False
         ok = self._trader.connect()
         logger.info(f"connect response: {ok}")
-        if not ok:
+        if ok != 0:
             logging.info("trader connect failed, not connected")
             return False
         ok = self._trader.subscribe(self._account)
         logger.info(f"subscribe response: {ok}")
-        if not ok:
+        if ok != 0:
             logging.info("trader subscribe failed, not connected")
             return False
         self.connected = True
