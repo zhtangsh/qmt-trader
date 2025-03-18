@@ -19,7 +19,7 @@ class DefaultXtQuantTraderCallback(XtQuantTraderCallback):
         连接断开
         :return:
         """
-        logger.info(datetime.datetime.now(), '连接断开回调')
+        logger.info(f'连接断开回调')
 
     def on_stock_order(self, order):
         """
@@ -32,7 +32,7 @@ class DefaultXtQuantTraderCallback(XtQuantTraderCallback):
         logger.info(order)
         message = qmt_order.kafka_message()
         self.kafka_client.send('orderCallback', message)
-        logger.info(datetime.datetime.now(), '委托回调', order.order_remark)
+        logger.info(f"委托回调:{order}")
 
     def on_stock_trade(self, trade):
         """
@@ -43,7 +43,7 @@ class DefaultXtQuantTraderCallback(XtQuantTraderCallback):
         qmt_trade = QmtTrade(trade)
         message = qmt_trade.kafka_message()
         self.kafka_client.send('tradeCallback', message)
-        logger.info(datetime.datetime.now(), '成交回调', trade.order_remark)
+        logger.info(f"成交回调:{trade}")
 
     def on_order_error(self, order_error):
         """
@@ -61,7 +61,7 @@ class DefaultXtQuantTraderCallback(XtQuantTraderCallback):
         :return:
         """
         logger.info(cancel_error)
-        logger.info(datetime.datetime.now(), sys._getframe().f_code.co_name)
+        logger.info(f"撤单失败推送:{sys._getframe().f_code.co_name}")
 
     def on_order_stock_async_response(self, response):
         """
@@ -77,13 +77,13 @@ class DefaultXtQuantTraderCallback(XtQuantTraderCallback):
         :param response: XtCancelOrderResponse 对象
         :return:
         """
+        logger.info(f"on_cancel_order_stock_async_response:{response}")
         logger.info(response)
-        logger.info(datetime.datetime.now(), sys._getframe().f_code.co_name)
 
     def on_account_status(self, status):
         """
         :param response: XtAccountStatus 对象
         :return:
         """
+        logger.info(f"on_account_status:{status}")
         logger.info(status)
-        logger.info(datetime.datetime.now(), sys._getframe().f_code.co_name)
