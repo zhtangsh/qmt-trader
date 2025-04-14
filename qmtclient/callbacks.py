@@ -8,6 +8,11 @@ import sys
 logger = logging.getLogger(__name__)
 
 
+def is_today(dt: datetime.datetime):
+    today = datetime.date.today()
+    return dt.date() == today
+
+
 class DefaultXtQuantTraderCallback(XtQuantTraderCallback):
     kafka_client: KafkaProducer = None
 
@@ -42,8 +47,10 @@ class DefaultXtQuantTraderCallback(XtQuantTraderCallback):
         """
         qmt_trade = QmtTrade(trade)
         message = qmt_trade.kafka_message()
+        if not is_today(message['traded_time']):
+            logger.info(f'非法成交回调，日期不是今天。成交回调:{trade}')
+            return
         self.kafka_client.send('tradeCallback', message)
-        logger.info(f"成交回调:{trade}")
 
     def on_order_error(self, order_error):
         """
