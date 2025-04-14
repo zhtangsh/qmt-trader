@@ -36,6 +36,9 @@ class DefaultXtQuantTraderCallback(XtQuantTraderCallback):
         logger.info(order.price_type)
         logger.info(order)
         message = qmt_order.kafka_message()
+        if not is_today(message['order_time']):
+            logger.info(f'非法委托回调，日期不是今天。委托回调:{order}')
+            return
         self.kafka_client.send('orderCallback', message)
         logger.info(f"委托回调:{order}")
 
@@ -51,6 +54,7 @@ class DefaultXtQuantTraderCallback(XtQuantTraderCallback):
             logger.info(f'非法成交回调，日期不是今天。成交回调:{trade}')
             return
         self.kafka_client.send('tradeCallback', message)
+        logger.info(f'成交回调:{trade}')
 
     def on_order_error(self, order_error):
         """
