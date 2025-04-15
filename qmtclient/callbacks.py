@@ -33,14 +33,12 @@ class DefaultXtQuantTraderCallback(XtQuantTraderCallback):
         :return:
         """
         qmt_order = QmtOrder(order)
-        logger.info(order.price_type)
-        logger.info(order)
         message = qmt_order.kafka_message()
-        if not is_today(message['order_time']):
-            logger.info(f'非法委托回调，日期不是今天。委托回调:{order}')
+        if not is_today(qmt_order.order_time):
+            logger.info(f'非法委托回调，日期不是今天。委托回调:{message}')
             return
         self.kafka_client.send('orderCallback', message)
-        logger.info(f"委托回调:{order}")
+        logger.info(f"委托回调:{message}")
 
     def on_stock_trade(self, trade):
         """
@@ -50,11 +48,11 @@ class DefaultXtQuantTraderCallback(XtQuantTraderCallback):
         """
         qmt_trade = QmtTrade(trade)
         message = qmt_trade.kafka_message()
-        if not is_today(message['traded_time']):
-            logger.info(f'非法成交回调，日期不是今天。成交回调:{trade}')
+        if not is_today(qmt_trade.traded_time):
+            logger.info(f'非法成交回调，日期不是今天。成交回调:{message}')
             return
         self.kafka_client.send('tradeCallback', message)
-        logger.info(f'成交回调:{trade}')
+        logger.info(f'成交回调:{message}')
 
     def on_order_error(self, order_error):
         """
